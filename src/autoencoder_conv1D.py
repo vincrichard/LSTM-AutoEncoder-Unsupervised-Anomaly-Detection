@@ -8,10 +8,10 @@ class AutoEncoderConv1D(nn.Module):
         # encoder part
         self.encoder = nn.Sequential(
             nn.Conv1d(in_channels=1, out_channels=conv_dim1, kernel_size=(1, kernel_lenght), stride=1, padding=0, bias=True),
-            nn.BatchNorm1d(conv_dim1),
+            nn.BatchNorm2d(conv_dim1),
             nn.ReLU(True),
             nn.Flatten(),
-            nn.Linear(in_features=(x_dim-kernel_lenght)*conv_dim1, out_features=h_dim1, bias=True),
+            nn.Linear(in_features=(x_dim-kernel_lenght +1)*conv_dim1, out_features=h_dim1, bias=True),
             nn.BatchNorm1d(h_dim1),
             nn.ReLU(True),
             nn.Linear(in_features=h_dim1, out_features=h_dim2, bias=True),

@@ -9,9 +9,9 @@ from src.callbacks import EarlyStopping
 from src.airbus_data import AirbusData
 from src.model_management import ModelManagement
 from src.plot_class import PlotLoss
+from src.autoencoder_conv1D import AutoEncoderConv1D
 
-
-batch_size=64
+batch_size=8
 z_dim=30
 name_file='encoded_data'
 name_model='test_model'
@@ -24,7 +24,7 @@ def scale(x):
   return (x-np.mean(x))/np.std(x)
 
 # train_dataset = pd.read_csv('../data/airbus_train.csv')
-test_dataset = AirbusData('../data/airbus_test.csv',nrows=300) #transform=scale
+test_dataset = AirbusData('../data/airbus_test.csv',nrows=16) #transform=scale
 #Create Data generator
 # train_loader = torch.utils.data.DataLoader(dataset=train_dataset, batch_size=batch_size, shuffle=True)
 test_loader = DataLoader(dataset=test_dataset, batch_size=batch_size, shuffle=True)
@@ -32,8 +32,8 @@ test_loader = DataLoader(dataset=test_dataset, batch_size=batch_size, shuffle=Tr
 ##############
 # build model#
 ##############
-model = AutoEncoderVanilla(x_dim=61440, h_dim1= 512, h_dim2=256, z_dim=z_dim)
-
+# model = AutoEncoderVanilla(x_dim=61440, h_dim1= 512, h_dim2=256, z_dim=z_dim)
+model = AutoEncoderConv1D(x_dim=61440, conv_dim1=64, kernel_lenght=10, h_dim1=512, h_dim2=256, z_dim=z_dim)
 # if torch.cuda.is_available():
 #     autoencoder_vanilla.cuda()
 
@@ -56,7 +56,8 @@ def train(epoch):
         # data = data.cuda()
         optimizer.zero_grad()
 
-        x_rec = model.forward(data.float())
+        # x_rec = model.forward(data.float())
+        x_rec = model.forward(data.view(-1, 1, 1, 61440).float())
         loss = loss_function(data, x_rec)
 
         loss.backward()
