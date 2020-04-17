@@ -17,5 +17,6 @@ class ModelManagement:
                 'model_state_dict': model.state_dict(),
                 'optimizer_state_dict': optimizer.state_dict(),
                 'loss': loss,
-            }, self.path+'%s_%d' %(self.name_model,epoch))
+            }, self.path+'%s_epoch_%d' %(self.name_model,epoch))
+        self.last_metrics = loss
 

@@ -6,12 +6,12 @@ class EarlyStopping:
 
     def check_training(self, metric):
         if metric < self.last_metrics:
-            stop_training = False
+            self.last_metrics = metric
+            self.patience_count = 0
+            return False
         elif (metric > self.last_metrics) & (self.patience_count < self.patience):
             self.patience_count += 1
-            stop_training = False
+            return False
         else:
-            stop_training = True
-        self.last_metrics = metric
-        return stop_training
+            return True
 

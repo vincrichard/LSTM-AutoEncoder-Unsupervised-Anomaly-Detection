@@ -20,8 +20,11 @@ path_model='../model/'
 ##############
 #load dataset#
 ##############
+def scale(x):
+  return (x-np.mean(x))/np.std(x)
+
 # train_dataset = pd.read_csv('../data/airbus_train.csv')
-test_dataset = AirbusData('../data/airbus_test.csv',nrows=300)
+test_dataset = AirbusData('../data/airbus_test.csv',nrows=300) #transform=scale
 #Create Data generator
 # train_loader = torch.utils.data.DataLoader(dataset=train_dataset, batch_size=batch_size, shuffle=True)
 test_loader = DataLoader(dataset=test_dataset, batch_size=batch_size, shuffle=True)
@@ -64,8 +67,7 @@ def train(epoch):
             (batch_idx+1) / len(test_loader)*100, loss.item() / len(data)))
     avg_loss = train_loss / len(test_loader.dataset)
     print('====> Epoch: {} Average loss: {:.4f}'.format(epoch, avg_loss))
-    if (epoch % 10) == 0:
-        model_management.checkpoint(epoch, model, optimizer, avg_loss)
+    model_management.checkpoint(epoch, model, optimizer, avg_loss)
     plot_loss.losses.append(avg_loss)
     return earlyStopping.check_training(avg_loss)
 

@@ -13,8 +13,10 @@ class AirbusData(Dataset):
             transform (callable, optional): Optional transform to be applied
                 on a sample.
         """
-        self.data = pd.read_csv(csv_file, delimiter=' ', nrows=nrows)
+        self.data = pd.read_csv(csv_file, delimiter=' ', nrows=nrows, header=None)
         self.transform = transform
+        if transform is not None:
+            self.data = self.data.apply(self.transform, axis=1)
 
     def __len__(self):
         return len(self.data)
