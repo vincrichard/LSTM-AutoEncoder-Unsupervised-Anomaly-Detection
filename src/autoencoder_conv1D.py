@@ -11,7 +11,7 @@ class AutoEncoderConv1D(nn.Module):
             nn.BatchNorm2d(conv_dim1),
             nn.ReLU(True),
             nn.Flatten(),
-            nn.Linear(in_features=((x_dim-kernel_length)/stride +1)*conv_dim1, out_features=h_dim1, bias=True),
+            nn.Linear(in_features=(int((x_dim-kernel_length)/stride) +1)*conv_dim1, out_features=h_dim1, bias=True),
             nn.BatchNorm1d(h_dim1),
             nn.ReLU(True),
             nn.Linear(in_features=h_dim1, out_features=h_dim2, bias=True),
