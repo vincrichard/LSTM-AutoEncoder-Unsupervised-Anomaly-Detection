@@ -14,7 +14,7 @@ from src.autoencoder_conv1D import AutoEncoderConv1D
 batch_size=8
 z_dim=30
 name_file='encoded_data'
-name_model='test_model'
+name_model='encoder_model'
 path_model='../model/'
 
 ##############
@@ -32,8 +32,8 @@ test_loader = DataLoader(dataset=test_dataset, batch_size=batch_size, shuffle=Tr
 ##############
 # build model#
 ##############
-# model = AutoEncoderVanilla(x_dim=61440, h_dim1= 512, h_dim2=256, z_dim=z_dim)
-model = AutoEncoderConv1D(x_dim=61440, conv_dim1=64, kernel_lenght=10, h_dim1=512, h_dim2=256, z_dim=z_dim)
+model = AutoEncoderVanilla(x_dim=61440, h_dim1= 512, h_dim2=256, z_dim=z_dim)
+# model = AutoEncoderConv1D(x_dim=61440, conv_dim1=64, kernel_length=300, stride=30, h_dim1=512, h_dim2=256, z_dim=z_dim)
 # if torch.cuda.is_available():
 #     autoencoder_vanilla.cuda()
 

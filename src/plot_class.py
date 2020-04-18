@@ -10,4 +10,5 @@ class PlotLoss:
         plt.plot(range(len(self.losses)), self.losses)
         plt.xlabel('epoch')
         plt.ylabel('loss')
+        plt.yscale('log')
         plt.show()
