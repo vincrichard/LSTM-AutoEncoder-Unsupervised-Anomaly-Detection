@@ -19,7 +19,7 @@ batch_size=32
 ##############
 
 # train_dataset = AirbusDataSeq('../data/airbus_train.csv', seq_length=20, nrows=2)
-test_dataset = AirbusDataSeq('../data/airbus_test.csv',seq_length=seq_length, nrows=2) #transform=scale
+test_dataset = AirbusDataSeq('../data/airbus_test.csv',seq_length=seq_length, nrows=1) #transform=scale
 #Create Data generator
 # train_loader = DataLoader(dataset=train_dataset, batch_size=1, shuffle=True)
 test_loader = DataLoader(dataset=test_dataset, batch_size=1, shuffle=True)
@@ -64,11 +64,11 @@ def train(epoch, loader):
             optimizer.step()
             #reset hidden and cell state
             model.reset_memory()
-            print('\r', 'Seq [{}/{} ({:.0f}%)] Ongoing [{}/{} ({:.0f}%)]'.format(
-                seq_number+1, len(loader),
+            print('\r', 'Seq [{}/{} ({:.0f}%)] Ongoing [{}/{} ({:.0f}%\tLoss: {:.6f})]'.format(
+                seq_number + 1, len(loader),
                 (seq_number + 1) * 100 / len(loader),
-                batch_seq+1, len(batch_loader),
-                (batch_seq+1) *100 / len(batch_loader)
+                batch_seq + 1, len(batch_loader),
+                (batch_seq + 1) * 100 / len(batch_loader), loss.item()
             ), sep='', end='', flush=True)
         # print('Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
         #     epoch, seq_number + 1, len(loader),
@@ -81,8 +81,10 @@ def train(epoch, loader):
 
 
 if __name__ == "__main__":
-    for epoch in range(1, 5):
-        if train(epoch, test_loader):
-            break
-    model_management.save_best_model()
-    plot_loss.plot()
+    # for epoch in range(1, 5):
+    #     if train(epoch, test_loader):
+    #         break
+    # model_management.save_best_model()
+    # plot_loss.plot()
+    for seq_number, inout_seq in enumerate(test_loader):
+        torch.save(inout_seq, '../data/seq/seq_%d.pt'%(seq_number))

@@ -1,5 +1,6 @@
 import torch
 import torch.nn as nn
+from torch.autograd import Variable
 
 
 class LSTMVanilla(nn.Module):
@@ -11,8 +12,8 @@ class LSTMVanilla(nn.Module):
         self.num_layers = num_layers
         self.pred_length = pred_length
         self.batch_size = batch_size
-        self.hidden_cell = (torch.zeros(num_layers, batch_size, hidden_size),
-                            torch.zeros(num_layers, batch_size, hidden_size))
+        self.hidden_cell = (torch.randn((num_layers, batch_size, hidden_size), dtype=torch.float).cuda(),
+                            torch.randn((num_layers, batch_size, hidden_size), dtype=torch.float).cuda())
 
         self.lstm = nn.LSTM(input_size=input_size, hidden_size=hidden_size,
                             num_layers=num_layers, batch_first=True, dropout=dropout, bias=True)
@@ -24,7 +25,10 @@ class LSTMVanilla(nn.Module):
         predictions = self.linear(self.hidden_cell[0].view(-1, self.hidden_size))
         return predictions
 
-    def reset_memory(self):
-        self.hidden_cell = (torch.zeros(self.num_layers, self.batch_size, self.hidden_size),
-                           torch.zeros(self.num_layers, self.batch_size, self.hidden_size))
+    def detach_hidden(self):
+        self.hidden_cell = (self.hidden_cell[0].detach(), self.hidden_cell[1].detach())
+
+    def reset_hidden(self):
+        self.hidden_cell = (torch.randn((self.num_layers, self.batch_size, self.hidden_size), dtype=torch.float).cuda(),
+                            torch.randn((self.num_layers, self.batch_size, self.hidden_size), dtype=torch.float).cuda())
 
