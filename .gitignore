@@ -1,6 +1,6 @@
 .idea/
 .ipynb_checkpoints/
 data/
-model/
+models/
 *.zip
 __pycache__/

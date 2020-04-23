@@ -4,18 +4,17 @@ import torch
 import torch.optim as optim
 from torch.utils.data import DataLoader
 import torch.nn.functional as F
-from src.autoencoder_vanilla import AutoEncoderVanilla
-from src.callbacks import EarlyStopping
-from src.airbus_data import AirbusData
-from src.model_management import ModelManagement
-from src.plot_class import PlotLoss
-from src.autoencoder_conv1D import AutoEncoderConv1D
+from src.model.autoencoder_vanilla import AutoEncoderVanilla
+from src.utils.callbacks import EarlyStopping
+from src.utils.airbus_data import AirbusData
+from src.utils.model_management import ModelManagement
+from src.utils.plot_class import LossCheckpoint
 
 batch_size=8
 z_dim=30
 name_file='encoded_data'
 name_model='encoder_model'
-path_model='../model/'
+path_model='../models/'
 
 ##############
 #load dataset#
@@ -30,10 +29,10 @@ test_dataset = AirbusData('../data/airbus_test.csv',nrows=16) #transform=scale
 test_loader = DataLoader(dataset=test_dataset, batch_size=batch_size, shuffle=True)
 
 ##############
-# build model#
+# build models#
 ##############
 model = AutoEncoderVanilla(x_dim=61440, h_dim1= 512, h_dim2=256, z_dim=z_dim)
-# model = AutoEncoderConv1D(x_dim=61440, conv_dim1=64, kernel_length=300, stride=30, h_dim1=512, h_dim2=256, z_dim=z_dim)
+# models = AutoEncoderConv1D(x_dim=61440, conv_dim1=64, kernel_length=300, stride=30, h_dim1=512, h_dim2=256, z_dim=z_dim)
 # if torch.cuda.is_available():
 #     autoencoder_vanilla.cuda()
 
@@ -43,7 +42,7 @@ optimizer = optim.Adam(model.parameters(), lr=0.001)
 earlyStopping = EarlyStopping(patience=5)
 model_management = ModelManagement(path_model, name_model)
 #Plot
-plot_loss = PlotLoss()
+plot_loss = LossCheckpoint()
 
 
 def loss_function(x, x_rec):
@@ -56,7 +55,7 @@ def train(epoch):
         # data = data.cuda()
         optimizer.zero_grad()
 
-        # x_rec = model.forward(data.float())
+        # x_rec = models.forward(data.float())
         x_rec = model.forward(data.view(-1, 1, 1, 61440).float())
         loss = loss_function(data, x_rec)
 
@@ -92,8 +91,3 @@ if __name__ == "__main__":
     get_feature_reduction(True)
     model_management.save(model)
     plot_loss.plot()
-
-    #Load model
-    # model = TheModelClass(*args, **kwargs)
-    # model.load_state_dict(torch.load(PATH))
-    # model.eval()
