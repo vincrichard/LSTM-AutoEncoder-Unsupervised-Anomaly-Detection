@@ -5,25 +5,36 @@ import numpy as np
 
 
 class AirbusData(Dataset):
-    def __init__(self, csv_file, nrows=None, transform=None):
+    def __init__(self, path, type, nrows=None):
         """
         Args:
-            csv_file (string): Path to the csv file with annotations.
-            transform (callable, optional): Optional transform to be applied
-                on a sample.
+            path (string): Path to file with annotations.
+            type (string): 'csv' or 'pytorch'
         """
-        self.data = pd.read_csv(csv_file, delimiter=' ', nrows=nrows, header=None)
-        self.transform = transform
-        if transform is not None:
-            self.data = self.data.apply(self.transform, axis=1)
+        if type == 'csv':
+            self.data = pd.read_csv(path, delimiter=' ', nrows=nrows, header=None)
+        if type == 'pytorch':
+            self.data = torch.load(path)
+        else:
+            raise ValueError('type value is wrong: ', type)
+        self.type = type
 
     def __len__(self):
-        return len(self.data)
+        if self.type == 'csv':
+            return len(self.data)
+        if self.type == 'pytorch':
+            return self.data.shape[1]
 
     def __getitem__(self, idx):
         if torch.is_tensor(idx):
             idx = idx.tolist()
-        return torch.from_numpy(np.array(self.data.iloc[idx, :], dtype=np.float))
+        if self.type == 'csv':
+            return torch.from_numpy(np.array(self.data.iloc[idx, :], dtype=np.float))
+        if self.type == 'pytorch':
+            return self.data[:,idx,:]
+
+
+# ---  Don't use what is down there  ---
 
 
 class AirbusDataSeq(Dataset):

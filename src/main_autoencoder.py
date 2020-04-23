@@ -23,7 +23,7 @@ def scale(x):
   return (x-np.mean(x))/np.std(x)
 
 # train_dataset = pd.read_csv('../data/airbus_train.csv')
-test_dataset = AirbusData('../data/airbus_test.csv',nrows=16) #transform=scale
+test_dataset = AirbusData('../data/airbus_test.csv',nrows=16, type='csv') #transform=scale
 #Create Data generator
 # train_loader = torch.utils.data.DataLoader(dataset=train_dataset, batch_size=batch_size, shuffle=True)
 test_loader = DataLoader(dataset=test_dataset, batch_size=batch_size, shuffle=True)
