@@ -13,7 +13,7 @@ class AirbusData(Dataset):
         """
         if type == 'csv':
             self.data = pd.read_csv(path, delimiter=' ', nrows=nrows, header=None)
-        if type == 'pytorch':
+        elif type == 'pytorch':
             self.data = torch.load(path)
         else:
             raise ValueError('type value is wrong: ', type)
@@ -31,7 +31,7 @@ class AirbusData(Dataset):
         if self.type == 'csv':
             return torch.from_numpy(np.array(self.data.iloc[idx, :], dtype=np.float))
         if self.type == 'pytorch':
-            return self.data[:,idx,:]
+            return self.data[idx,:,:]
 
 
 # ---  Don't use what is down there  ---
