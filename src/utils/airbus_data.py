@@ -23,7 +23,7 @@ class AirbusData(Dataset):
         if self.type == 'csv':
             return len(self.data)
         if self.type == 'pytorch':
-            return self.data.shape[1]
+            return self.data.shape[0]
 
     def __getitem__(self, idx):
         if torch.is_tensor(idx):
