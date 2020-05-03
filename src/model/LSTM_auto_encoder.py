@@ -2,6 +2,7 @@ import torch
 import torch.nn as nn
 
 
+# https://arxiv.org/pdf/1607.00148.pdf
 class LSTMAutoEncoder(nn.Module):
     def __init__(self, num_layers, hidden_size, nb_feature, dropout=0, device=torch.device('cpu')):
         super(LSTMAutoEncoder, self).__init__()
