@@ -19,7 +19,7 @@ My approach was to implement a LSTM AutoEncoder, following the architecture of t
 The idea is to use two lstm one encoder, and one decoder, but the decoder start at the end of the 
 sequence and tries to recreate the original sequence backward. 
 
-<img src='image/lstm_autoencoder.png'></img>
+<img src='image/lstm_autoencoder.png' height=250></img>
 
 ## Preprocessing
 Before implementation in order to have a lower computation cost, preprocessing was applied on each time series:
@@ -31,8 +31,8 @@ time serie anomaly detection
     Transformation applied:
         - mean, max, min, trend, kurtosis, level_shift (difference beetween consecutive mean), max_diff_var (maximum var difference of sliding window of 24)
       
-<img src='image/original_ts.png'></img>
-<img src='image/resample_ts.png'></img>
+<img src='image/original_ts.png' height=270></img>
+<img src='image/resample_ts.png'  height=270></img>
 
 Then those time series where split in sequence of size 50 with a moving window of step 30. Giving a training, validation and test set of 8049, 2013, and 15066 sequences respectively.
 
