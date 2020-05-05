@@ -38,7 +38,8 @@ Then those time series where split in sequence of size 50 with a moving window o
 
 ## Anomaly score and optimization
 Once training is done we can find the set of ts the one that are failed to be reproduce, and so they can be labelled as anomaly. In order to calculate this anomaly score, the following the paper <a href='https://export.arxiv.org/pdf/1711.10192'>[2] </a> use the cosinus similarity was used and average over the sequences:
-    $$ \text{Anomaly_score} = 1 - \text{CosSimilarity}(x, \hat{x})$$
+
+<img src='image/latex_cos_similarity.png'></img>
 
 The anomaly score was kept for each transformation which gave a 7 dimensional vector. Then those vector were used to train a Isolation Forest and to have the final anomaly scores.
 
