@@ -10,6 +10,8 @@ at in total 60 * 1024 = 61440 equidistant time points.
 The data was composed of 1677 and 2511 time series respectively for training and testing 
 our model. The training data contains no anomaly. The metric of the challenge was AUC. 
 
+Note that the dataset was provided by Airbus but I don't have the data anymore, and either way don't have the right to share the dataset. 
+
 ## Model
 My approach was to implement a LSTM AutoEncoder, following the architecture of those paper: 
 
